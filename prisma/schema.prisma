@@ -1,13 +1,61 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// This is your Prisma schema file
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"  // Add this line
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Document {
+  id        String    @id @default(cuid())
+  title     String
+  rawText   String    @map("raw_text")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  
+  chunks    Chunk[]
+  tests     Test[]
+  
+  @@map("documents")
+}
+
+model Chunk {
+  id         String   @id @default(cuid())
+  content    String
+  embedding  Json     // For storing arrays
+  documentId String   @map("document_id")
+  
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  questions  Question[]
+  
+  @@map("chunks")
+}
+
+model Test {
+  id         String    @id @default(cuid())
+  documentId String    @map("document_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  
+  document   Document   @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  questions  Question[]
+  
+  @@map("tests")
+}
+
+model Question {
+  id             String   @id @default(cuid())
+  text           String
+  answer         String
+  explanation    String
+  sourceChunkId  String   @map("source_chunk_id")
+  testId         String   @map("test_id")
+  
+  sourceChunk    Chunk    @relation(fields: [sourceChunkId], references: [id], onDelete: Cascade)
+  test           Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+  
+  @@map("questions")
 }

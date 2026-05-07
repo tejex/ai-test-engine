@@ -6,16 +6,26 @@ export default function App() {
   const [text, setText] = useState("");
 
   const handleSubmit = async () => {
-    const doc = await api.post("/documents", {
-      title: "Test Doc",
-      text,
-    });
+    try {
+      console.log("starting submit");
 
-    const test = await api.post("/tests/generate", {
-      documentId: doc.data.id,
-    });
+      const doc = await api.post("/documents", {
+        title: "Test Doc",
+        text,
+      });
 
-    window.location.href = `/tests/${test.data.id}`;
+      console.log("document created", doc.data);
+
+      const test = await api.post("/tests/generate", {
+        documentId: doc.data.id,
+      });
+
+      console.log("test generated", test.data);
+
+      window.location.href = `/tests/${test.data.id}`;
+    } catch (err) {
+      console.error("ERROR:", err);
+    }
   };
 
   return (

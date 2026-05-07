@@ -12,7 +12,7 @@ export function safeParse(json: string) {
 
 export async function generateQuestions(context: string) {
   const res = await groq.chat.completions.create({
-    model: "llama3-70b-8192",
+    model:"llama-3.3-70b-versatile",
     messages: [
       {
         role: "system",
@@ -21,23 +21,23 @@ export async function generateQuestions(context: string) {
       {
         role: "user",
         content: `
-Context:
-${context}
+            Context:
+            ${context}
 
-Return JSON:
-{
-  "questions": [
-    {
-      "text": "...",
-      "answer": "...",
-      "explanation": "..."
-    }
-  ]
-}
-        `,
-      },
-    ],
-  });
+            Return JSON:
+            {
+            "questions": [
+                {
+                "text": "...",
+                "answer": "...",
+                "explanation": "..."
+                }
+            ]
+            }
+                    `,
+                },
+                ],
+            });
 
   const choice = res.choices?.[0];
   if (!choice || !choice.message?.content) {
