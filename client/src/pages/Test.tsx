@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { api } from "../api/client";
+import { useEffect, useState } from "react" 
+import { useParams } from "react-router-dom" 
+import { api } from "../api/client" 
 import {
   Box,
   Button,
   Typography,
   Paper,
   Stack,
-} from '@mui/material';
+} from '@mui/material' 
 
-import TestHeader from "../components/TestHeader";
-import QuestionNavigation from "../components/QuestionNavigation";
-import CurrentQuestion from "../components/CurrentQuestion";
+import TestHeader from "../components/TestHeader" 
+import QuestionNavigation from "../components/QuestionNavigation" 
+import CurrentQuestion from "../components/CurrentQuestion" 
 
 
 export default function TestView() {
@@ -23,33 +23,35 @@ export default function TestView() {
 
   useEffect(() => {
     api.get(`/tests/${id}`).then((res) => {
-      setQuestions(res.data.questions);
-    });
-  }, [id]);
+      setQuestions(res.data.questions) 
+    }) 
+  }, [id]) 
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0)) 
+    }, 1000) 
+    return () => clearInterval(timer) 
+  }, []) 
 
   const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
+    const mins = Math.floor(seconds / 60) 
+    const secs = seconds % 60 
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}` 
+  } 
 
   const handleAnswerChange = (questionId: string, answer: string) => {
-    setAnswers({ ...answers, [questionId]: answer });
-  };
+    setAnswers({ ...answers, [questionId]: answer }) 
+  } 
 
   const handleSubmit = () => {
-    console.log("Submitting answers:", answers);
-    // api.post(`/tests/${id}/submit`, { answers });
-  };
+    console.log("Submitting answers:", answers) 
+    // api.post(`/tests/${id}/submit`, { answers }) 
+  } 
 
-  const currentQuestion = questions[currentQuestionIndex];
+  const currentQuestion = questions[currentQuestionIndex] 
+
+  console.log(questions)
 
   return (
     <Box
@@ -170,5 +172,5 @@ export default function TestView() {
         </Stack>
       </Box>
     </Box>
-  );
+  ) 
 }

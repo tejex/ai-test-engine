@@ -22,7 +22,7 @@ const MaterialInputCard = ({ text, setText, handleSubmit }:any) => {
         mx: 'auto',
         p: 3,
         borderRadius: 2,
-        backgroundColor: '#e8e9ed', // foreground color
+        backgroundColor: '#e8e9ed',
       }}
     >
       <Typography
@@ -30,7 +30,7 @@ const MaterialInputCard = ({ text, setText, handleSubmit }:any) => {
         sx={{
           fontWeight: 600,
           mb: 1,
-          color: '#0e1015', // dark text on light background
+          color: '#0e1015',
         }}
       >
         Master a new topic
@@ -39,7 +39,7 @@ const MaterialInputCard = ({ text, setText, handleSubmit }:any) => {
       <Typography
         variant="body2"
         sx={{
-          color: '#0e1015', // dark text
+          color: '#0e1015',
           opacity: 0.7,
           mb: 3,
           lineHeight: 1.5,
