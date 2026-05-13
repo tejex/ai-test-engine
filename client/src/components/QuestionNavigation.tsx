@@ -1,12 +1,9 @@
-import { Box, Typography, Paper, Stack, Chip } from '@mui/material';
-import type { Key } from 'react';
+import { Box, Typography, Paper, Stack } from '@mui/material';
 
 const QuestionNavigation = ({ questions, currentIndex, onSelectQuestion, answers }:any) => {
-  // Mock data for question statuses
-  const getQuestionStatus = (index: number) => {
+  const getQuestionStatus = (index: number, questionId: string) => {
     if (index === currentIndex) return 'current';
-    // For demo: mark some as answered
-    if (index === 0 || index === 3) return 'answered';
+    if (answers[questionId]) return 'answered';
     return 'unanswered';
   };
 
@@ -44,8 +41,8 @@ const QuestionNavigation = ({ questions, currentIndex, onSelectQuestion, answers
       </Typography>
 
       <Stack spacing={1.5}>
-        {questions.map((_: any, idx:any) => {
-          const status = getQuestionStatus(idx);
+        {questions.map((question: any, idx:any) => {
+          const status = getQuestionStatus(idx, question.id);
           const isCurrent = status === 'current';
           
           return (

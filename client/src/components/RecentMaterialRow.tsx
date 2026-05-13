@@ -1,12 +1,8 @@
 import {
   Box,
   Typography,
-  TextareaAutosize,
-  Button,
-  Paper,
   Stack,
   Chip,
-  Divider,
 } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 

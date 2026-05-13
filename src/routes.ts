@@ -3,6 +3,7 @@ import { PrismaClient } from "../src/generated/prisma/client" // Update this pat
 
 import { chunkText } from "./services/ingestion"
 import { generateQuestions } from "./services/generation"
+import { gradeQuestion } from "./services/grading";
 
 const router = Router()
 const prisma = new PrismaClient()
@@ -95,5 +96,117 @@ router.get("/tests/:id", async (req, res) => {
     res.status(500).json({ error: "failed to fetch test" })
   }
 })
+
+router.post("/tests/:id/submit", async (req, res) => {
+  try {
+    const { answers } = req.body;
+
+    const test = await prisma.test.findUnique({
+      where: {
+        id: req.params.id,
+      },
+      include: {
+        questions: true,
+      },
+    });
+
+    if (!test) {
+      return res.status(404).json({ error: "Test not found" });
+    }
+
+    const gradedResponses = await Promise.all(
+      test.questions.map(async (question: any) => {
+        const userAnswer = answers[question.id] || "";
+
+        const grading = await gradeQuestion({
+          question: question.question,
+          correctAnswer: question.correctAnswer,
+          userAnswer,
+          explanation: question.explanation,
+        });
+
+        return {
+          questionId: question.id,
+          userAnswer,
+          isCorrect: grading.isCorrect,
+          score: grading.score,
+          feedback: grading.feedback,
+        };
+      })
+    );
+
+    const totalScore =
+      gradedResponses.reduce((acc, curr) => acc + curr.score, 0) /
+      gradedResponses.length;
+
+    const attempt = await prisma.attempt.create({
+      data: {
+        testId: test.id,
+        score: totalScore,
+        responses: {
+          create: gradedResponses,
+        },
+      },
+      include: {
+        responses: {
+          include: {
+            question: true,
+          },
+        },
+      },
+    });
+
+    res.json(attempt);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to submit test" });
+  }
+});
+
+router.get("/results/:attemptId", async (req, res) => {
+  try {
+    const attempt = await prisma.attempt.findUnique({
+      where: {
+        id: req.params.attemptId,
+      },
+      include: {
+        responses: {
+          include: {
+            question: true,
+          },
+        },
+        test: true,
+      },
+    });
+
+    res.json(attempt);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch results" });
+  }
+});
+
+router.get("/attempts/recent", async (_, res) => {
+  try {
+    const attempts = await prisma.attempt.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 10,
+      include: {
+        test: {
+          include: {
+            document: true,
+          },
+        },
+      },
+    });
+
+    res.json(attempts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch attempts" });
+  }
+});
 
 export default router

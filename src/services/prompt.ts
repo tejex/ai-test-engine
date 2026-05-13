@@ -42,26 +42,31 @@ ${context}
 `
 }
 
-// export const content = (context: any) => {
-//   return `
-// You are generating a structured educational test.
+export const gradingPrompt = ({
+  question,
+  correctAnswer,
+  userAnswer,
+  explanation,
+}: any) => `
+You are grading a student's answer.
 
-// IMPORTANT: Your response must be valid JSON with EXACTLY this structure:
+Return STRICT JSON only.
 
-// {
-//   "questions": [
-//     {
-//       "text": "The question text goes here",
-//       "answer": "The correct answer goes here", 
-//       "explanation": "Explanation of why this is correct"
-//     }
-//   ]
-// }
+{
+  "isCorrect": true,
+  "score": 1,
+  "feedback": "Short explanation"
+}
 
-// Do NOT include: options, type, difficulty, id, or any other fields.
-// Only use "text", "answer", and "explanation".
+Question:
+${question}
 
-// Context:
-// ${context}
-// `;
-// };
+Correct Answer:
+${correctAnswer}
+
+Explanation:
+${explanation}
+
+Student Answer:
+${userAnswer}
+`;

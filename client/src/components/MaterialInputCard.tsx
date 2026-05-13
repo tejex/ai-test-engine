@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
 import {
-  Box,
   Typography,
   TextareaAutosize,
   Button,

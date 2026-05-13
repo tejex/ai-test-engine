@@ -42,6 +42,7 @@ model Test {
 
   document  Document   @relation(fields: [documentId], references: [id], onDelete: Cascade)
   questions Question[]
+  attempts Attempt[]
 
   @@map("tests")
 }
@@ -57,11 +58,41 @@ model Question {
   source         String
   sourceChunkId  String             @map("source_chunk_id")
   testId         String             @map("test_id")
+  responses Response[]
+
 
   sourceChunk Chunk @relation(fields: [sourceChunkId], references: [id], onDelete: Cascade)
   test        Test  @relation(fields: [testId], references: [id], onDelete: Cascade)
 
   @@map("questions")
+}
+
+model Attempt {
+  id        String   @id @default(cuid())
+  testId    String   @map("test_id")
+  score     Float
+  createdAt DateTime @default(now()) @map("created_at")
+
+  test      Test       @relation(fields: [testId], references: [id], onDelete: Cascade)
+  responses Response[]
+
+  @@map("attempts")
+}
+
+model Response {
+  id             String   @id @default(cuid())
+  attemptId      String   @map("attempt_id")
+  questionId     String   @map("question_id")
+
+  userAnswer     String   @map("user_answer")
+  isCorrect      Boolean  @map("is_correct")
+  score          Float
+  feedback       String
+
+  attempt        Attempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question       Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("responses")
 }
 
 enum QuestionType {

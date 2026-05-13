@@ -44,10 +44,17 @@ export default function TestView() {
     setAnswers({ ...answers, [questionId]: answer }) 
   } 
 
-  const handleSubmit = () => {
-    console.log("Submitting answers:", answers) 
-    // api.post(`/tests/${id}/submit`, { answers }) 
-  } 
+  const handleSubmit = async () => {
+    try {
+      const res = await api.post(`/tests/${id}/submit`, {
+        answers,
+      });
+
+      window.location.href = `/results?latest=${res.data.id}`;
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const currentQuestion = questions[currentQuestionIndex] 
 
