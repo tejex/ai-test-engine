@@ -1,13 +1,16 @@
 import {
   Typography,
   TextareaAutosize,
-  Button,
   Paper,
   Stack,
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import AppButton from './AppButton';
+import { useAppTheme } from '../styles/ThemeModeProvider';
 
 const MaterialInputCard = ({ text, setText, handleSubmit }:any) => {
+  const { theme } = useAppTheme();
+
   const handleFileImport = () => {
     console.log('Import file clicked');
   };
@@ -20,7 +23,8 @@ const MaterialInputCard = ({ text, setText, handleSubmit }:any) => {
         mx: 'auto',
         p: 3,
         borderRadius: 2,
-        backgroundColor: '#e8e9ed',
+        backgroundColor: theme.surface,
+        border: `1px solid ${theme.borderStrong}`,
       }}
     >
       <Typography
@@ -28,7 +32,7 @@ const MaterialInputCard = ({ text, setText, handleSubmit }:any) => {
         sx={{
           fontWeight: 600,
           mb: 1,
-          color: '#0e1015',
+          color: theme.text,
         }}
       >
         Master a new topic
@@ -37,8 +41,7 @@ const MaterialInputCard = ({ text, setText, handleSubmit }:any) => {
       <Typography
         variant="body2"
         sx={{
-          color: '#0e1015',
-          opacity: 0.7,
+          color: theme.subtleText,
           mb: 3,
           lineHeight: 1.5,
         }}
@@ -56,40 +59,37 @@ const MaterialInputCard = ({ text, setText, handleSubmit }:any) => {
           padding: '12px',
           fontSize: '14px',
           fontFamily: 'inherit',
-          border: '1px solid #ccc',
+          border: `1px solid ${theme.borderStrong}`,
           borderRadius: '8px',
           resize: 'vertical',
           marginBottom: '16px',
-          backgroundColor: '#ffffff',
-          color: '#0e1015',
+          backgroundColor: theme.field,
+          color: theme.text,
           overflow: 'hidden',
         }}
       />
 
       <Stack direction="row" spacing={2} sx={{ alignItems: 'center', mb: 3 }}>
-        <Button
+        <AppButton
           variant="outlined"
           startIcon={<CloudUploadIcon />}
           onClick={handleFileImport}
           sx={{
-            textTransform: 'none',
-            borderRadius: 2,
-            borderColor: '#5e6ad2',
-            color: '#5e6ad2',
+            borderColor: theme.accent,
+            color: theme.accent,
             '&:hover': {
-              borderColor: '#5e6ad2',
-              backgroundColor: 'rgba(94, 106, 210, 0.04)',
+              borderColor: theme.accent,
+              backgroundColor: theme.accentSoft,
             },
           }}
         >
           Import from device
-        </Button>
+        </AppButton>
         
         <Typography
           variant="caption"
           sx={{
-            color: '#0e1015',
-            opacity: 0.6,
+            color: theme.mutedText,
             fontSize: '12px',
           }}
         >
@@ -97,24 +97,22 @@ const MaterialInputCard = ({ text, setText, handleSubmit }:any) => {
         </Typography>
       </Stack>
 
-      <Button
+      <AppButton
         fullWidth
         variant="contained"
         onClick={handleSubmit}
         sx={{
-          textTransform: 'none',
-          borderRadius: 2,
           py: 1.5,
-          backgroundColor: '#5e6ad2', // primary purple
+          backgroundColor: theme.accent,
           color: '#ffffff', // white text
           fontWeight: 600,
           '&:hover': {
-            backgroundColor: '#4a56b8', // slightly darker purple on hover
+            backgroundColor: theme.accentHover,
           },
         }}
       >
         Generate Test
-      </Button>
+      </AppButton>
     </Paper>
   );
 };

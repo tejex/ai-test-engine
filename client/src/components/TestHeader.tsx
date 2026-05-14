@@ -1,11 +1,15 @@
 import { Box, Typography, Paper, LinearProgress } from '@mui/material';
+import { useAppTheme } from '../styles/ThemeModeProvider';
 
 const TestHeader = ({ overallMastery = 78 }) => {
+  const { theme } = useAppTheme();
+
   return (
     <Paper
       elevation={0}
       sx={{
-        backgroundColor: '#e8e9ed',
+        backgroundColor: theme.surface,
+        border: `1px solid ${theme.borderStrong}`,
         borderRadius: 2,
         p: 3,
         mb: 3,
@@ -16,7 +20,7 @@ const TestHeader = ({ overallMastery = 78 }) => {
           variant="h5"
           sx={{
             fontWeight: 600,
-            color: '#0e1015',
+            color: theme.text,
           }}
         >
           TestFlow AI
@@ -26,8 +30,7 @@ const TestHeader = ({ overallMastery = 78 }) => {
           <Typography
             variant="body2"
             sx={{
-              color: '#0e1015',
-              opacity: 0.7,
+              color: theme.mutedText,
               mb: 0.5,
             }}
           >
@@ -37,7 +40,7 @@ const TestHeader = ({ overallMastery = 78 }) => {
             variant="h4"
             sx={{
               fontWeight: 700,
-              color: '#5e6ad2',
+              color: theme.accent,
             }}
           >
             {overallMastery}%
@@ -51,9 +54,9 @@ const TestHeader = ({ overallMastery = 78 }) => {
         sx={{
           height: 8,
           borderRadius: 4,
-          backgroundColor: 'rgba(94, 106, 210, 0.1)',
+          backgroundColor: theme.accentSoft,
           '& .MuiLinearProgress-bar': {
-            backgroundColor: '#5e6ad2',
+            backgroundColor: theme.accent,
             borderRadius: 4,
           },
         }}

@@ -1,6 +1,9 @@
 import { Box, Typography, Paper, Stack } from '@mui/material';
+import { useAppTheme } from '../styles/ThemeModeProvider';
 
 const QuestionNavigation = ({ questions, currentIndex, onSelectQuestion, answers }:any) => {
+  const { theme } = useAppTheme();
+
   const getQuestionStatus = (index: number, questionId: string) => {
     if (index === currentIndex) return 'current';
     if (answers[questionId]) return 'answered';
@@ -10,11 +13,11 @@ const QuestionNavigation = ({ questions, currentIndex, onSelectQuestion, answers
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'current':
-        return '#5e6ad2';
+        return theme.accent;
       case 'answered':
         return '#4caf50';
       default:
-        return 'rgba(14, 16, 21, 0.2)';
+        return theme.borderStrong;
     }
   };
 
@@ -22,7 +25,8 @@ const QuestionNavigation = ({ questions, currentIndex, onSelectQuestion, answers
     <Paper
       elevation={0}
       sx={{
-        backgroundColor: '#e8e9ed',
+        backgroundColor: theme.surface,
+        border: `1px solid ${theme.borderStrong}`,
         borderRadius: 2,
         p: 3,
         position: 'sticky',
@@ -33,7 +37,7 @@ const QuestionNavigation = ({ questions, currentIndex, onSelectQuestion, answers
         variant="h6"
         sx={{
           fontWeight: 600,
-          color: '#0e1015',
+          color: theme.text,
           mb: 2,
         }}
       >
@@ -56,18 +60,18 @@ const QuestionNavigation = ({ questions, currentIndex, onSelectQuestion, answers
                 p: 1.5,
                 borderRadius: 1.5,
                 cursor: 'pointer',
-                backgroundColor: isCurrent ? 'rgba(94, 106, 210, 0.1)' : 'transparent',
+                backgroundColor: isCurrent ? theme.accentSoft : 'transparent',
                 border: '1px solid',
-                borderColor: isCurrent ? '#5e6ad2' : 'transparent',
+                borderColor: isCurrent ? theme.accent : 'transparent',
                 '&:hover': {
-                  backgroundColor: 'rgba(94, 106, 210, 0.05)',
+                  backgroundColor: theme.accentSoft,
                 },
               }}
             >
               <Typography
                 variant="body2"
                 sx={{
-                  color: '#0e1015',
+                  color: theme.text,
                   fontWeight: isCurrent ? 600 : 400,
                 }}
               >

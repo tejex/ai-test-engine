@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react" 
-import { useParams } from "react-router-dom" 
+import { useNavigate, useParams } from "react-router-dom" 
 import { api } from "../api/client" 
 import {
   Box,
-  Button,
   Typography,
   Paper,
   Stack,
 } from '@mui/material' 
 
+import AppButton from "../components/AppButton"
 import TestHeader from "../components/TestHeader" 
 import QuestionNavigation from "../components/QuestionNavigation" 
 import CurrentQuestion from "../components/CurrentQuestion" 
+import { useAppTheme } from "../styles/ThemeModeProvider"
 
 
 export default function TestView() {
   const { id } = useParams()
+  const navigate = useNavigate()
+  const { theme } = useAppTheme()
   const [questions, setQuestions] = useState<any[]>([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(2)
   const [answers, setAnswers] = useState<Record<string, string>>({})
@@ -50,7 +53,7 @@ export default function TestView() {
         answers,
       });
 
-      window.location.href = `/results?latest=${res.data.id}`;
+      navigate(`/results?latest=${res.data.id}`);
     } catch (err) {
       console.error(err);
     }
@@ -65,7 +68,7 @@ export default function TestView() {
       sx={{
         width: '100%',
         minHeight: '100vh',
-        backgroundColor: '#0e1015',
+        backgroundColor: theme.background,
         py: 4,
         px: 3,
         display: 'flex',
@@ -102,7 +105,8 @@ export default function TestView() {
             <Paper
               elevation={0}
               sx={{
-                backgroundColor: '#e8e9ed',
+                backgroundColor: theme.surface,
+                border: `1px solid ${theme.borderStrong}`,
                 borderRadius: 2,
                 p: 3,
                 mt: 3,
@@ -115,7 +119,7 @@ export default function TestView() {
                 <Typography
                   variant="body2"
                   sx={{
-                    color: '#0e1015',
+                    color: theme.text,
                     fontWeight: 500,
                   }}
                 >
@@ -124,7 +128,7 @@ export default function TestView() {
                 <Typography
                   variant="h6"
                   sx={{
-                    color: '#5e6ad2',
+                    color: theme.accent,
                     fontWeight: 600,
                     fontFamily: 'monospace',
                   }}
@@ -134,18 +138,16 @@ export default function TestView() {
               </Stack>
 
               <Stack direction="row" spacing={2}>
-                <Button
+                <AppButton
                   variant="outlined"
                   onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
                   disabled={currentQuestionIndex === 0}
                   sx={{
-                    textTransform: 'none',
-                    borderRadius: 2,
-                    borderColor: '#5e6ad2',
-                    color: '#5e6ad2',
+                    borderColor: theme.accent,
+                    color: theme.accent,
                     '&:hover': {
-                      borderColor: '#4a56b8',
-                      backgroundColor: 'rgba(94, 106, 210, 0.04)',
+                      borderColor: theme.accentHover,
+                      backgroundColor: theme.accentSoft,
                     },
                     '&.Mui-disabled': {
                       borderColor: 'rgba(94, 106, 210, 0.3)',
@@ -154,25 +156,23 @@ export default function TestView() {
                   }}
                 >
                   Previous
-                </Button>
+                </AppButton>
                 
-                <Button
+                <AppButton
                   variant="contained"
                   onClick={handleSubmit}
                   sx={{
-                    textTransform: 'none',
-                    borderRadius: 2,
                     px: 4,
-                    backgroundColor: '#5e6ad2',
+                    backgroundColor: theme.accent,
                     color: '#ffffff',
                     fontWeight: 600,
                     '&:hover': {
-                      backgroundColor: '#4a56b8',
+                      backgroundColor: theme.accentHover,
                     },
                   }}
                 >
                   Submit Answer
-                </Button>
+                </AppButton>
               </Stack>
             </Paper>
           </Box>

@@ -1,13 +1,15 @@
 // src/components/questions/MultipleChoice.tsx
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material' 
 import type { QuestionComponentProps } from "../../components/types/questions"
+import { useAppTheme } from '../../styles/ThemeModeProvider'
 
 export default function MultipleChoice({ value, onChange, question }: QuestionComponentProps) {
+  const { theme } = useAppTheme()
   const options = question?.options || [] 
   
   return (
     <FormControl component="fieldset" sx={{ width: '100%' }}>
-      <FormLabel component="legend" sx={{ mb: 2, fontWeight: 500 }}>
+      <FormLabel component="legend" sx={{ mb: 2, fontWeight: 500, color: theme.mutedText }}>
         Select your answer:
       </FormLabel>
       <RadioGroup value={value} onChange={(e) => onChange(e.target.value)}>
@@ -19,8 +21,9 @@ export default function MultipleChoice({ value, onChange, question }: QuestionCo
             label={option}
             sx={{
               mb: 1,
-              '& .MuiRadio-root': { color: '#5e6ad2' },
-              '& .Mui-checked': { color: '#5e6ad2' },
+              color: theme.text,
+              '& .MuiRadio-root': { color: theme.accent },
+              '& .Mui-checked': { color: theme.accent },
             }}
           />
         ))}

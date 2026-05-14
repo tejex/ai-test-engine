@@ -47,6 +47,15 @@ router.post("/tests/generate", async (req, res) => {
 
     const context = chunks.map((c:any) => c.content).join("\n\n")
     const data = await generateQuestions(context)
+    const examTitle =
+      typeof data.examTitle === "string" && data.examTitle.trim()
+        ? data.examTitle.trim()
+        : "Generated Study Exam";
+
+    await prisma.document.update({
+      where: { id: documentId },
+      data: { title: examTitle },
+    });
 
     const test = await prisma.test.create({
       data: {
@@ -206,6 +215,55 @@ router.get("/attempts/recent", async (_, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch attempts" });
+  }
+});
+
+router.delete("/attempts/:id", async (req, res) => {
+  try {
+    const attempt = await prisma.attempt.findUnique({
+      where: {
+        id: req.params.id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!attempt) {
+      return res.status(404).json({ error: "Attempt not found" });
+    }
+
+    await prisma.$transaction([
+      prisma.response.deleteMany({
+        where: {
+          attemptId: req.params.id,
+        },
+      }),
+      prisma.attempt.delete({
+        where: {
+          id: req.params.id,
+        },
+      }),
+    ]);
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete attempt" });
+  }
+});
+
+router.delete("/attempts", async (_, res) => {
+  try {
+    await prisma.$transaction([
+      prisma.response.deleteMany(),
+      prisma.attempt.deleteMany(),
+    ]);
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete attempts" });
   }
 });
 

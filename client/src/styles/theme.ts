@@ -1,0 +1,46 @@
+export type AppThemeMode = "dark" | "light";
+
+export const appThemes = {
+  dark: {
+    background: "#000000",
+    page: "#030407",
+    surface: "#07080c",
+    panel: "#0e1015",
+    elevated: "#161a22",
+    field: "#050609",
+    border: "rgba(148, 163, 184, 0.22)",
+    borderStrong: "rgba(148, 163, 184, 0.34)",
+    text: "#f4f5f8",
+    mutedText: "#9297a3",
+    subtleText: "rgba(244, 245, 248, 0.64)",
+    accent: "#6672e8",
+    accentHover: "#5662d8",
+    accentSoft: "rgba(102, 114, 232, 0.14)",
+    danger: "#f87171",
+    dangerSoft: "rgba(248, 113, 113, 0.12)",
+    nav: "rgba(0, 0, 0, 0.9)",
+    navBorder: "rgba(148, 163, 184, 0.18)",
+  },
+  light: {
+    background: "#1a1d23",
+    page: "#20232b",
+    surface: "#242832",
+    panel: "#2b303b",
+    elevated: "#303642",
+    field: "#1e222b",
+    border: "rgba(203, 213, 225, 0.2)",
+    borderStrong: "rgba(203, 213, 225, 0.32)",
+    text: "#f0f2f7",
+    mutedText: "#b1b7c4",
+    subtleText: "rgba(240, 242, 247, 0.68)",
+    accent: "#7782f3",
+    accentHover: "#6873df",
+    accentSoft: "rgba(119, 130, 243, 0.16)",
+    danger: "#fca5a5",
+    dangerSoft: "rgba(252, 165, 165, 0.13)",
+    nav: "rgba(32, 35, 43, 0.92)",
+    navBorder: "rgba(203, 213, 225, 0.16)",
+  },
+} as const;
+
+export type AppTheme = (typeof appThemes)[AppThemeMode];

@@ -1,8 +1,11 @@
 // src/components/questions/TrueFalse.tsx
 import { RadioGroup, FormControlLabel, Radio } from '@mui/material' 
 import type { QuestionComponentProps } from "../../components/types/questions"
+import { useAppTheme } from '../../styles/ThemeModeProvider'
 
 export default function TrueFalse({ value, onChange }: QuestionComponentProps) {
+  const { theme } = useAppTheme()
+
   return (
     <RadioGroup value={value} onChange={(e) => onChange(e.target.value)}>
       <FormControlLabel
@@ -10,8 +13,9 @@ export default function TrueFalse({ value, onChange }: QuestionComponentProps) {
         control={<Radio />}
         label="True"
         sx={{
-          '& .MuiRadio-root': { color: '#5e6ad2' },
-          '& .Mui-checked': { color: '#5e6ad2' },
+          color: theme.text,
+          '& .MuiRadio-root': { color: theme.accent },
+          '& .Mui-checked': { color: theme.accent },
         }}
       />
       <FormControlLabel
@@ -19,8 +23,9 @@ export default function TrueFalse({ value, onChange }: QuestionComponentProps) {
         control={<Radio />}
         label="False"
         sx={{
-          '& .MuiRadio-root': { color: '#5e6ad2' },
-          '& .Mui-checked': { color: '#5e6ad2' },
+          color: theme.text,
+          '& .MuiRadio-root': { color: theme.accent },
+          '& .Mui-checked': { color: theme.accent },
         }}
       />
     </RadioGroup>

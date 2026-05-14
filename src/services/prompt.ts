@@ -23,6 +23,7 @@ Rules:
 Return format:
 
 {
+  "examTitle": "A concise, specific exam title based on the provided context",
   "questions": [
     {
       "id": "q1",
