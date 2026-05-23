@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react" 
 import { useNavigate, useParams } from "react-router-dom" 
-import { api } from "../api/client" 
 import {
   Box,
   Typography,
@@ -9,26 +8,22 @@ import {
 } from '@mui/material' 
 
 import AppButton from "../components/AppButton"
+import PageFrame from "../components/layout/PageFrame"
 import TestHeader from "../components/TestHeader" 
 import QuestionNavigation from "../components/QuestionNavigation" 
 import CurrentQuestion from "../components/CurrentQuestion" 
+import { useTest } from "../hooks/useTest"
 import { useAppTheme } from "../styles/ThemeModeProvider"
 
 
-export default function TestView() {
+export default function TestPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { theme } = useAppTheme()
-  const [questions, setQuestions] = useState<any[]>([])
+  const { questions, isSubmitting, submitAnswers } = useTest(id)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [timeLeft, setTimeLeft] = useState(765)
-
-  useEffect(() => {
-    api.get(`/tests/${id}`).then((res) => {
-      setQuestions(res.data.questions) 
-    }) 
-  }, [id]) 
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -49,11 +44,13 @@ export default function TestView() {
 
   const handleSubmit = async () => {
     try {
-      const res = await api.post(`/tests/${id}/submit`, {
-        answers,
-      });
+      const result = await submitAnswers(answers);
 
-      navigate(`/results?latest=${res.data.id}`);
+      if (!result) {
+        return;
+      }
+
+      navigate(`/results?latest=${result.id}`);
     } catch (err) {
       console.error(err);
     }
@@ -63,18 +60,7 @@ export default function TestView() {
   const isLastQuestion = currentQuestionIndex === questions.length - 1
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        minHeight: '100vh',
-        backgroundColor: theme.background,
-        py: 4,
-        px: 3,
-        display: 'flex',
-        justifyContent: 'center',
-      }}
-    >
-      <Box sx={{ width: '100%', maxWidth: 1200 }}>
+    <PageFrame maxWidth={1200} px={3} py={4}>
         <Stack direction="row" spacing={3} sx={{ width: '100%' }}>
           {/* Left Column - Question Navigation */}
           <Box sx={{ width: 280, flexShrink: 0 }}>
@@ -94,7 +80,7 @@ export default function TestView() {
               question={currentQuestion}
               questionNumber={currentQuestionIndex + 1}
               totalQuestions={questions.length}
-              onAnswerChange={(answer:any) => 
+              onAnswerChange={(answer: string) => 
                 currentQuestion && handleAnswerChange(currentQuestion.id, answer)
               }
               selectedAnswer={answers[currentQuestion?.id]}
@@ -191,6 +177,7 @@ export default function TestView() {
                 <AppButton
                   variant="contained"
                   onClick={handleSubmit}
+                  disabled={isSubmitting}
                   sx={{
                     px: 4,
                     backgroundColor: '#14b8a6',
@@ -201,13 +188,12 @@ export default function TestView() {
                     },
                   }}
                 >
-                  Submit Exam
+                  {isSubmitting ? "Submitting..." : "Submit Exam"}
                 </AppButton>
               </Stack>
             </Paper>
           </Box>
         </Stack>
-      </Box>
-    </Box>
+    </PageFrame>
   ) 
 }

@@ -20,6 +20,7 @@ type MaterialInputCardProps = {
   notes: string[];
   setNotes: (notes: string[]) => void;
   handleSubmit: () => void;
+  isGenerating?: boolean;
 };
 
 const MaterialInputCard = ({
@@ -28,6 +29,7 @@ const MaterialInputCard = ({
   notes,
   setNotes,
   handleSubmit,
+  isGenerating = false,
 }: MaterialInputCardProps) => {
   const { theme } = useAppTheme();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -202,7 +204,7 @@ const MaterialInputCard = ({
       <AppButton
         fullWidth
         variant="contained"
-        disabled={!hasStudyMaterial}
+        disabled={!hasStudyMaterial || isGenerating}
         onClick={handleSubmit}
         sx={{
           py: 1.5,
@@ -218,7 +220,7 @@ const MaterialInputCard = ({
           },
         }}
       >
-        Generate Test
+        {isGenerating ? 'Generating...' : 'Generate Test'}
       </AppButton>
 
       <NoteViewerDialog

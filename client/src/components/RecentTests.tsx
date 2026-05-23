@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -10,19 +9,8 @@ import {
 } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { api } from '../api/client';
+import { useRecentAttempts } from '../hooks/useRecentAttempts';
 import { useAppTheme } from '../styles/ThemeModeProvider';
-
-type RecentAttempt = {
-  id: string;
-  score: number;
-  createdAt: string;
-  test?: {
-    document?: {
-      title?: string;
-    };
-  };
-};
 
 const formatDate = (value: string) =>
   new Intl.DateTimeFormat('en', {
@@ -31,7 +19,14 @@ const formatDate = (value: string) =>
     year: 'numeric',
   }).format(new Date(value));
 
-const RecentMaterialRow = ({ title, dateText, masteryPercent, onClick }:any) => {
+type RecentTestRowProps = {
+  title: string;
+  dateText: string;
+  masteryPercent: number;
+  onClick: () => void;
+};
+
+const RecentTestRow = ({ title, dateText, masteryPercent, onClick }: RecentTestRowProps) => {
   const { theme } = useAppTheme();
 
   return (
@@ -102,24 +97,15 @@ const RecentMaterialRow = ({ title, dateText, masteryPercent, onClick }:any) => 
   );
 };
 
-type RecentMaterialsSectionProps = {
+type RecentTestsProps = {
   onNavigate?: () => void;
   variant?: 'page' | 'panel';
 };
 
-const RecentMaterialsSection = ({ onNavigate, variant = 'page' }: RecentMaterialsSectionProps) => {
+const RecentTests = ({ onNavigate, variant = 'page' }: RecentTestsProps) => {
   const navigate = useNavigate();
   const { theme } = useAppTheme();
-  const [attempts, setAttempts] = useState<RecentAttempt[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    api
-      .get('/attempts/recent')
-      .then((res) => setAttempts((res.data || []).slice(0, 3)))
-      .catch((err) => console.error('Failed to load recent tests', err))
-      .finally(() => setIsLoading(false));
-  }, []);
+  const { attempts, isLoading } = useRecentAttempts({ limit: 3 });
 
   return (
     <Box sx={{ maxWidth: variant === 'panel' ? 'none' : 600, mx: 'auto', mt: variant === 'panel' ? 0 : 4 }}>
@@ -163,7 +149,7 @@ const RecentMaterialsSection = ({ onNavigate, variant = 'page' }: RecentMaterial
           </Box>
         ) : (
           attempts.map((attempt) => (
-            <RecentMaterialRow
+            <RecentTestRow
               key={attempt.id}
               title={attempt.test?.document?.title || 'Untitled exam'}
               dateText={`Completed ${formatDate(attempt.createdAt)}`}
@@ -180,4 +166,4 @@ const RecentMaterialsSection = ({ onNavigate, variant = 'page' }: RecentMaterial
   );
 };
 
-export default RecentMaterialsSection;
+export default RecentTests;

@@ -3,7 +3,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import AppNav from "./AppNav";
-import RecentMaterialsSection from "./RecentMaterials";
+import RecentTests from "./RecentTests";
 import { useAppTheme } from "../styles/ThemeModeProvider";
 
 export default function AppLayout() {
@@ -56,7 +56,7 @@ export default function AppLayout() {
           </IconButton>
         </Stack>
 
-        <RecentMaterialsSection
+        <RecentTests
           variant="panel"
           onNavigate={() => setIsRecentTestsOpen(false)}
         />
