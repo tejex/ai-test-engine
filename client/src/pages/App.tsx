@@ -6,30 +6,30 @@ import {
   Box,
 } from '@mui/material';
 import MaterialInputCard from "../components/MaterialInputCard";
-import RecentMaterialsSection from "../components/RecentMaterials";
 import { useAppTheme } from "../styles/ThemeModeProvider";
 
 export default function App() {
   const navigate = useNavigate();
   const { theme } = useAppTheme();
-  const [text, setText] = useState("");
+  const [draftNote, setDraftNote] = useState("");
+  const [notes, setNotes] = useState<string[]>([]);
 
   const handleSubmit = async () => {
     try {
-      console.log("starting submit");
+      const text = [...notes, draftNote.trim()].filter(Boolean).join("\n\n---\n\n");
+
+      if (!text) {
+        return;
+      }
 
       const doc = await api.post("/documents", {
         title: "Untitled Study Material",
         text,
       })
 
-      console.log("document created", doc.data);
-
       const test = await api.post("/tests/generate", {
         documentId: doc.data.id,
       });
-
-      console.log("test generated", test.data);
 
       navigate(`/tests/${test.data.id}`);
     } catch (err) {
@@ -50,8 +50,13 @@ export default function App() {
         alignItems: 'center',
       }}
     >
-        <MaterialInputCard handleSubmit={handleSubmit} text={text} setText={setText}/>
-        <RecentMaterialsSection />
+        <MaterialInputCard
+          handleSubmit={handleSubmit}
+          draftNote={draftNote}
+          setDraftNote={setDraftNote}
+          notes={notes}
+          setNotes={setNotes}
+        />
       </Box>
     );
 }

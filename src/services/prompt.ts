@@ -11,6 +11,8 @@ Rules:
 - Output STRICT valid JSON only
 - No markdown
 - No code blocks
+- Escape any line breaks inside JSON string values as \\n
+- Do not include literal unescaped tabs or newlines inside quoted strings
 - Questions MUST be answerable ONLY from the provided context
 - Generate a mix of:
   - multiple_choice

@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import HistoryIcon from "@mui/icons-material/History";
 import HomeIcon from "@mui/icons-material/Home";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -22,7 +23,11 @@ const navItems = [
   },
 ];
 
-export default function AppNav() {
+type AppNavProps = {
+  onOpenRecentTests: () => void;
+};
+
+export default function AppNav({ onOpenRecentTests }: AppNavProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const { mode, theme, toggleTheme } = useAppTheme();
@@ -108,6 +113,22 @@ export default function AppNav() {
             }}
           >
             {nextModeLabel}
+          </AppButton>
+          <AppButton
+            variant="outlined"
+            startIcon={<HistoryIcon />}
+            onClick={onOpenRecentTests}
+            sx={{
+              minWidth: 122,
+              borderColor: theme.border,
+              color: theme.text,
+              "&:hover": {
+                borderColor: theme.accent,
+                backgroundColor: theme.accentSoft,
+              },
+            }}
+          >
+            Recent
           </AppButton>
         </Stack>
       </Stack>

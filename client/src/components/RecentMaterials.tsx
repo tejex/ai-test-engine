@@ -102,7 +102,12 @@ const RecentMaterialRow = ({ title, dateText, masteryPercent, onClick }:any) => 
   );
 };
 
-const RecentMaterialsSection = () => {
+type RecentMaterialsSectionProps = {
+  onNavigate?: () => void;
+  variant?: 'page' | 'panel';
+};
+
+const RecentMaterialsSection = ({ onNavigate, variant = 'page' }: RecentMaterialsSectionProps) => {
   const navigate = useNavigate();
   const { theme } = useAppTheme();
   const [attempts, setAttempts] = useState<RecentAttempt[]>([]);
@@ -117,7 +122,7 @@ const RecentMaterialsSection = () => {
   }, []);
 
   return (
-    <Box sx={{ maxWidth: 600, mx: 'auto', mt: 4 }}>
+    <Box sx={{ maxWidth: variant === 'panel' ? 'none' : 600, mx: 'auto', mt: variant === 'panel' ? 0 : 4 }}>
       <Typography
         variant="subtitle2"
         sx={{
@@ -163,7 +168,10 @@ const RecentMaterialsSection = () => {
               title={attempt.test?.document?.title || 'Untitled exam'}
               dateText={`Completed ${formatDate(attempt.createdAt)}`}
               masteryPercent={Math.round(attempt.score * 100)}
-              onClick={() => navigate(`/results/${attempt.id}`)}
+              onClick={() => {
+                navigate(`/results/${attempt.id}`);
+                onNavigate?.();
+              }}
             />
           ))
         )}

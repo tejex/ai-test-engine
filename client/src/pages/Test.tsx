@@ -20,7 +20,7 @@ export default function TestView() {
   const navigate = useNavigate()
   const { theme } = useAppTheme()
   const [questions, setQuestions] = useState<any[]>([])
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(2)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [timeLeft, setTimeLeft] = useState(765)
 
@@ -60,8 +60,7 @@ export default function TestView() {
   };
 
   const currentQuestion = questions[currentQuestionIndex] 
-
-  console.log(questions)
+  const isLastQuestion = currentQuestionIndex === questions.length - 1
 
   return (
     <Box
@@ -113,9 +112,11 @@ export default function TestView() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                gap: 2,
+                flexWrap: 'wrap',
               }}
             >
-            <Stack direction="row" spacing={2} sx={{ alignItems: 'center', mb: 3 }}>
+            <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
                 <Typography
                   variant="body2"
                   sx={{
@@ -137,41 +138,70 @@ export default function TestView() {
                 </Typography>
               </Stack>
 
-              <Stack direction="row" spacing={2}>
-                <AppButton
-                  variant="outlined"
-                  onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
-                  disabled={currentQuestionIndex === 0}
-                  sx={{
-                    borderColor: theme.accent,
-                    color: theme.accent,
-                    '&:hover': {
-                      borderColor: theme.accentHover,
-                      backgroundColor: theme.accentSoft,
-                    },
-                    '&.Mui-disabled': {
-                      borderColor: 'rgba(94, 106, 210, 0.3)',
-                      color: 'rgba(94, 106, 210, 0.3)',
-                    },
-                  }}
-                >
-                  Previous
-                </AppButton>
-                
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{
+                  alignItems: 'center',
+                  ml: 'auto',
+                }}
+              >
+                <Stack direction="row" spacing={1.25}>
+                  <AppButton
+                    variant="outlined"
+                    onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
+                    disabled={currentQuestionIndex === 0}
+                    sx={{
+                      borderColor: theme.borderStrong,
+                      color: theme.text,
+                      '&:hover': {
+                        borderColor: theme.accent,
+                        backgroundColor: theme.accentSoft,
+                      },
+                      '&.Mui-disabled': {
+                        borderColor: theme.border,
+                        color: theme.mutedText,
+                      },
+                    }}
+                  >
+                    Previous
+                  </AppButton>
+
+                  <AppButton
+                    variant="outlined"
+                    onClick={() => setCurrentQuestionIndex(prev => Math.min(questions.length - 1, prev + 1))}
+                    disabled={isLastQuestion || questions.length === 0}
+                    sx={{
+                      borderColor: theme.accent,
+                      color: theme.accent,
+                      '&:hover': {
+                        borderColor: theme.accentHover,
+                        backgroundColor: theme.accentSoft,
+                      },
+                      '&.Mui-disabled': {
+                        borderColor: theme.border,
+                        color: theme.mutedText,
+                      },
+                    }}
+                  >
+                    Next
+                  </AppButton>
+                </Stack>
+
                 <AppButton
                   variant="contained"
                   onClick={handleSubmit}
                   sx={{
                     px: 4,
-                    backgroundColor: theme.accent,
+                    backgroundColor: '#14b8a6',
                     color: '#ffffff',
                     fontWeight: 600,
                     '&:hover': {
-                      backgroundColor: theme.accentHover,
+                      backgroundColor: '#0f9488',
                     },
                   }}
                 >
-                  Submit Answer
+                  Submit Exam
                 </AppButton>
               </Stack>
             </Paper>

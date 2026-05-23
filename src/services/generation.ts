@@ -1,13 +1,90 @@
 import groq from "../lib/groq.js"
 import { content } from "./prompt.js"
 
+function extractJsonObject(value: string) {
+  const cleaned = value
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/i, "")
+    .trim();
+
+  const match = cleaned.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error("Invalid JSON");
+
+  return match[0];
+}
+
+function escapeControlCharactersInStrings(value: string) {
+  let repaired = "";
+  let inString = false;
+  const validEscapes = new Set(["\"", "\\", "/", "b", "f", "n", "r", "t", "u"]);
+
+  for (let index = 0; index < value.length; index += 1) {
+    const char = value[index];
+
+    if (char === "\\") {
+      const nextChar = value[index + 1];
+
+      if (inString && (!nextChar || !validEscapes.has(nextChar))) {
+        repaired += "\\\\";
+      } else {
+        repaired += char;
+        if (nextChar) {
+          index += 1;
+          repaired += nextChar;
+        }
+      }
+
+      continue;
+    }
+
+    if (char === "\"") {
+      repaired += char;
+      inString = !inString;
+      continue;
+    }
+
+    if (inString) {
+      if (char === "\n") {
+        repaired += "\\n";
+        continue;
+      }
+
+      if (char === "\r") {
+        repaired += "\\r";
+        continue;
+      }
+
+      if (char === "\t") {
+        repaired += "\\t";
+        continue;
+      }
+    }
+
+    repaired += char;
+  }
+
+  return repaired;
+}
+
 export function safeParse(json: string) {
+  const jsonObject = extractJsonObject(json);
+
   try {
-    return JSON.parse(json)
-  } catch {
-    const match = json.match(/\{[\s\S]*\}/)
-    if (!match) throw new Error("Invalid JSON")
-    return JSON.parse(match[0])
+    return JSON.parse(jsonObject)
+  } catch (err) {
+    const repairedJson = escapeControlCharactersInStrings(jsonObject);
+
+    try {
+      return JSON.parse(repairedJson)
+    } catch (repairErr) {
+      console.error("Failed to parse generated JSON", {
+        originalError: err,
+        repairError: repairErr,
+        preview: repairedJson.slice(0, 1000),
+      });
+
+      throw repairErr;
+    }
   }
 }
 
@@ -17,7 +94,7 @@ export async function generateQuestions(context: string) {
     messages: [
       {
         role: "system",
-        content: "Generate quiz questions from provided context. Output strict JSON.",
+        content: "Generate quiz questions from provided context. Output strict valid JSON only. Escape newlines inside string values as \\n.",
       },
       {
         role: "user",
