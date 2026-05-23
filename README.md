@@ -12,8 +12,13 @@ The current product direction is exam-first: instead of only creating passive su
 - Start every generated exam from the first question.
 - Answer multiple question types:
   - Multiple choice
+  - Multi-select
   - Short answer
   - True/false
+  - Fill in the blank
+  - Matching
+  - Ordering
+  - Scenario-based application
 - Submit exams for AI grading.
 - View previous attempts on the results page.
 - Open recent tests from the navigation drawer.
@@ -60,10 +65,12 @@ The current product direction is exam-first: instead of only creating passive su
 │   ├── migrations/
 │   └── schema.prisma
 ├── src/
+│   ├── db/                   # Shared Prisma client
 │   ├── generated/            # Generated Prisma client
 │   ├── lib/                  # API clients and shared backend libs
+│   ├── routes/               # Domain route modules
 │   ├── services/             # AI generation, grading, ingestion, prompts
-│   ├── routes.ts             # Express routes
+│   ├── routes.ts             # Express route aggregator
 │   └── server.ts             # Express server entry
 └── package.json
 ```
@@ -169,6 +176,8 @@ This gives the app enough history to show prior exams, delete attempts, and insp
   - `useAttemptResult`
 - Page-level layout is centralized in `PageFrame`.
 - The note input UI is split into smaller note-focused components.
+- Backend routes are split by domain under `src/routes`.
+- Prisma client setup is centralized in `src/db/prisma.ts`.
 
 ## Later Features
 
@@ -185,16 +194,13 @@ Planned or possible future features:
 - Exam date planning and daily study recommendations.
 - Exportable exams and printable study material.
 - Editable generated questions before taking a test.
-- Support for more question formats, such as matching, fill-in-the-blank, coding questions, and math-heavy free response.
+- Support for more specialized question formats, such as coding questions and topic-aware worked problems.
 - Learning material library where students can revisit notes, generated tests, flashcards, summaries, and study plans from one place.
 
 ## Near-Term Technical Improvements
 
-- Split backend `routes.ts` into route modules.
-- Move Prisma client setup into a shared `src/db/prisma.ts`.
 - Add stronger request/response validation.
 - Improve typed API models shared between frontend and backend.
 - Add route-level lazy loading for frontend performance.
 - Add better error and empty states across the UI.
 - Add automated tests for generation, grading, and attempt deletion flows.
-

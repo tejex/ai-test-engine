@@ -5,7 +5,7 @@ import { useAppTheme } from '../../styles/ThemeModeProvider'
 
 export default function MultipleChoice({ value, onChange, question }: QuestionComponentProps) {
   const { theme } = useAppTheme()
-  const options = question?.options || [] 
+  const options = Array.isArray(question?.options) ? question.options : []
   
   return (
     <FormControl component="fieldset" sx={{ width: '100%' }}>

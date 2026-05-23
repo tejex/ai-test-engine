@@ -1,6 +1,16 @@
 // src/components/CurrentQuestion.tsx
 import { Box, Typography, Paper, Stack } from '@mui/material' 
-import { MultipleChoice, ShortAnswer, TrueFalse, QuestionTypeBadge } from '../components/questions' 
+import {
+  FillInBlank,
+  Matching,
+  MultipleChoice,
+  MultiSelect,
+  Ordering,
+  QuestionTypeBadge,
+  ScenarioQuestion,
+  ShortAnswer,
+  TrueFalse,
+} from '../components/questions'
 import type { Question } from "../components/types/questions"
 import { useAppTheme } from '../styles/ThemeModeProvider'
 
@@ -33,10 +43,20 @@ export default function CurrentQuestion({
     switch (question.type) {
       case 'multiple_choice':
         return <MultipleChoice {...commonProps} /> 
+      case 'multi_select':
+        return <MultiSelect {...commonProps} />
       case 'short_answer':
         return <ShortAnswer {...commonProps} /> 
       case 'true_false':
         return <TrueFalse {...commonProps} /> 
+      case 'fill_in_blank':
+        return <FillInBlank {...commonProps} />
+      case 'matching':
+        return <Matching {...commonProps} />
+      case 'ordering':
+        return <Ordering {...commonProps} />
+      case 'scenario':
+        return <ScenarioQuestion {...commonProps} />
       default:
         return <ShortAnswer {...commonProps} /> 
     }

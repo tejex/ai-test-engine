@@ -7,6 +7,30 @@ type ResultResponseCardProps = {
   index: number;
 };
 
+const formatAnswer = (value?: string) => {
+  if (!value) {
+    return "No answer provided";
+  }
+
+  try {
+    const parsed = JSON.parse(value);
+
+    if (Array.isArray(parsed)) {
+      return parsed.filter(Boolean).join(" -> ");
+    }
+
+    if (parsed && typeof parsed === "object") {
+      return Object.entries(parsed)
+        .map(([key, answer]) => `${key}: ${String(answer)}`)
+        .join("\n");
+    }
+  } catch {
+    return value;
+  }
+
+  return value;
+};
+
 const DetailBlock = ({
   label,
   children,
@@ -103,10 +127,10 @@ export default function ResultResponseCard({ response, index }: ResultResponseCa
 
       <Stack spacing={3}>
         <DetailBlock label="YOUR ANSWER" color={theme.text} mutedColor={theme.mutedText}>
-          {response.userAnswer || "No answer provided"}
+          {formatAnswer(response.userAnswer)}
         </DetailBlock>
         <DetailBlock label="CORRECT ANSWER" color={theme.accent} fontWeight={500} mutedColor={theme.mutedText}>
-          {response.question.correctAnswer}
+          {formatAnswer(response.question.correctAnswer)}
         </DetailBlock>
         <DetailBlock label="AI FEEDBACK" color={theme.subtleText} mutedColor={theme.mutedText}>
           {response.feedback}

@@ -1,18 +1,23 @@
+import { lazy, Suspense } from "react"
 import ReactDOM from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import './index.css'
-import HomePage from './pages/HomePage.tsx'
-import TestPage from "./pages/TestPage.tsx"
-import ResultDetailPage from "./pages/ResultDetailPage.tsx"
-import ResultsPage from "./pages/ResultsPage.tsx"
 import AppLayout from "./components/AppLayout.tsx"
+import RouteLoadingFallback from "./components/layout/RouteLoadingFallback.tsx"
 import { ThemeModeProvider } from "./styles/ThemeModeProvider.tsx"
+
+const HomePage = lazy(() => import("./pages/HomePage.tsx"))
+const TestPage = lazy(() => import("./pages/TestPage.tsx"))
+const ResultsPage = lazy(() => import("./pages/ResultsPage.tsx"))
+const ResultDetailPage = lazy(() => import("./pages/ResultDetailPage.tsx"))
 
 const router = createBrowserRouter([
   {
     element: (
       <ThemeModeProvider>
-        <AppLayout />
+        <Suspense fallback={<RouteLoadingFallback />}>
+          <AppLayout />
+        </Suspense>
       </ThemeModeProvider>
     ),
     children: [

@@ -97,8 +97,13 @@ model Response {
 
 enum QuestionType {
   multiple_choice
+  multi_select
   short_answer
   true_false
+  fill_in_blank
+  matching
+  ordering
+  scenario
 }
 
 enum Difficulty {
