@@ -5,7 +5,7 @@ import PageFrame from "../components/layout/PageFrame";
 import MaterialInputCard from "../components/MaterialInputCard";
 import { useGenerateTest } from "../hooks/useGenerateTest";
 
-export default function HomePage() {
+export default function UploadNotesPage() {
   const navigate = useNavigate();
   const { isGenerating, generateTestFromNotes } = useGenerateTest();
   const [draftNote, setDraftNote] = useState("");

@@ -16,6 +16,11 @@ router.get("/recent", async (_, res) => {
             document: true,
           },
         },
+        responses: {
+          include: {
+            question: true,
+          },
+        },
       },
     });
 

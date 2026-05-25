@@ -25,6 +25,7 @@ The current product direction is exam-first: instead of only creating passive su
 - Delete individual previous attempts.
 - Clear all previous attempts.
 - Light/dark theme toggle.
+- Dashboard with active recall stats, score visuals, activity calendar, weak areas, and recent tests.
 - SQLite-backed persistence through Prisma.
 
 ## Tech Stack
@@ -144,13 +145,15 @@ npx prisma studio
 
 ## Main User Flow
 
-1. Paste or import study notes on the home page.
-2. Attach one or more notes.
-3. Generate a test.
-4. Take the exam from question one.
-5. Submit the exam.
-6. Review score, feedback, and previous attempts.
-7. Return to previous results from the recent tests drawer or results page.
+1. Open the dashboard to review active recall progress.
+2. Start a new test from the upload page.
+3. Paste or import study notes.
+4. Attach one or more notes.
+5. Generate a test.
+6. Take the exam from question one.
+7. Submit the exam.
+8. Review score, feedback, and previous attempts.
+9. Return to previous results from the dashboard, recent tests drawer, or results page.
 
 ## Data Model Overview
 
@@ -167,7 +170,7 @@ This gives the app enough history to show prior exams, delete attempts, and insp
 
 ## Current Architecture Notes
 
-- Route pages are named by purpose, such as `HomePage`, `TestPage`, `ResultsPage`, and `ResultDetailPage`.
+- Route pages are named by purpose, such as `DashboardPage`, `UploadNotesPage`, `TestPage`, `ResultsPage`, and `ResultDetailPage`.
 - Frontend API calls live in `client/src/api` instead of being scattered through components.
 - Reusable data flows live in `client/src/hooks`, including:
   - `useGenerateTest`
@@ -201,6 +204,5 @@ Planned or possible future features:
 
 - Add stronger request/response validation.
 - Improve typed API models shared between frontend and backend.
-- Add route-level lazy loading for frontend performance.
 - Add better error and empty states across the UI.
 - Add automated tests for generation, grading, and attempt deletion flows.

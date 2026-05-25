@@ -9,6 +9,7 @@ export type RecentAttempt = {
       title?: string;
     };
   };
+  responses?: ResultResponse[];
 };
 
 export type ResultResponse = {
@@ -20,6 +21,8 @@ export type ResultResponse = {
     question: string;
     correctAnswer: string;
     explanation: string;
+    type?: string;
+    difficulty?: string;
   };
 };
 

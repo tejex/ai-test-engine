@@ -1,5 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import AssessmentIcon from "@mui/icons-material/Assessment";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import HistoryIcon from "@mui/icons-material/History";
 import HomeIcon from "@mui/icons-material/Home";
@@ -13,7 +14,13 @@ const navItems = [
     label: "Home",
     path: "/",
     icon: <HomeIcon />,
-    isActive: (pathname: string) => pathname === "/" || pathname.startsWith("/tests"),
+    isActive: (pathname: string) => pathname === "/",
+  },
+  {
+    label: "New test",
+    path: "/upload",
+    icon: <AddCircleOutlineIcon />,
+    isActive: (pathname: string) => pathname === "/upload" || pathname.startsWith("/tests"),
   },
   {
     label: "Results",

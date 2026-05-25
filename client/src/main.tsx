@@ -6,7 +6,8 @@ import AppLayout from "./components/AppLayout.tsx"
 import RouteLoadingFallback from "./components/layout/RouteLoadingFallback.tsx"
 import { ThemeModeProvider } from "./styles/ThemeModeProvider.tsx"
 
-const HomePage = lazy(() => import("./pages/HomePage.tsx"))
+const DashboardPage = lazy(() => import("./pages/DashboardPage.tsx"))
+const UploadNotesPage = lazy(() => import("./pages/UploadNotesPage.tsx"))
 const TestPage = lazy(() => import("./pages/TestPage.tsx"))
 const ResultsPage = lazy(() => import("./pages/ResultsPage.tsx"))
 const ResultDetailPage = lazy(() => import("./pages/ResultDetailPage.tsx"))
@@ -21,7 +22,8 @@ const router = createBrowserRouter([
       </ThemeModeProvider>
     ),
     children: [
-      { path: "/", element: <HomePage /> },
+      { path: "/", element: <DashboardPage /> },
+      { path: "/upload", element: <UploadNotesPage /> },
       { path: "/tests/:id", element: <TestPage /> },
       { path: "/results", element: <ResultsPage /> },
       { path: "/results/:attemptId", element: <ResultDetailPage /> },
