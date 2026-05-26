@@ -2,6 +2,7 @@ import { Router } from "express";
 import { Difficulty, QuestionType } from "../generated/prisma/enums";
 import { prisma } from "../db/prisma";
 import { generateQuestions } from "../services/generation";
+import { normalizeGenerationSettings } from "../services/generationSettings";
 import { gradeQuestion } from "../services/grading";
 
 const router = Router();
@@ -15,6 +16,7 @@ const stringifyAnswer = (answer: unknown) =>
 router.post("/generate", async (req, res) => {
   try {
     const { documentId } = req.body;
+    const settings = normalizeGenerationSettings(req.body.settings);
 
     const chunks = await prisma.chunk.findMany({
       where: { documentId },
@@ -26,11 +28,13 @@ router.post("/generate", async (req, res) => {
     }
 
     const context = chunks.map((chunk) => chunk.content).join("\n\n");
-    const data = await generateQuestions(context);
+    const data = await generateQuestions(context, settings);
 
     if (!data.questions.length) {
       return res.status(500).json({ error: "No questions were generated" });
     }
+
+    const generatedQuestions = data.questions.slice(0, settings.questionCount);
 
     const examTitle =
       typeof data.examTitle === "string" && data.examTitle.trim()
@@ -46,7 +50,7 @@ router.post("/generate", async (req, res) => {
       data: {
         documentId,
         questions: {
-          create: data.questions.map((question: any, index: number) => ({
+          create: generatedQuestions.map((question: any, index: number) => ({
             id: `q_${Date.now()}_${index}`,
             type: questionTypes.has(question.type) ? question.type : QuestionType.short_answer,
             question: question.question || question.text,

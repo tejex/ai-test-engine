@@ -1,5 +1,6 @@
 import groq from "../lib/groq.js"
 import { content } from "./prompt.js"
+import type { GenerationSettings } from "./generationSettings.js";
 
 function extractJsonObject(value: string) {
   const cleaned = value
@@ -88,7 +89,7 @@ export function safeParse(json: string) {
   }
 }
 
-export async function generateQuestions(context: string) {
+export async function generateQuestions(context: string, settings: GenerationSettings) {
   const res = await groq.chat.completions.create({
     model:"llama-3.3-70b-versatile",
     messages: [
@@ -98,7 +99,7 @@ export async function generateQuestions(context: string) {
       },
       {
         role: "user",
-        content: content(context),
+        content: content(context, settings),
       },
     ],
   })

@@ -1,8 +1,25 @@
-
-
+import type { GenerationSettings } from "./generationSettings.js";
 
 //Future Prompt
-export const content =  (context: any) => {
+const difficultyInstructions = {
+  easy: "- Overall difficulty target: easy. Prefer direct recall, core definitions, and foundational relationships.",
+  medium: "- Overall difficulty target: medium. Mix easy, medium, and hard questions, with most questions at medium difficulty.",
+  hard: "- Overall difficulty target: hard. Prefer application, nuance, comparisons, and multi-step reasoning when supported by the context.",
+} satisfies Record<GenerationSettings["difficulty"], string>;
+
+const questionMixInstructions = {
+  balanced: `- Question mix target: balanced.
+- Use a healthy variety of recall and application questions.
+- Include several question types when they naturally fit the notes.`,
+  recall: `- Question mix target: recall focused.
+- Prefer multiple_choice, true_false, fill_in_blank, and short_answer.
+- Focus on definitions, facts, key relationships, and core concepts from the notes.`,
+  application: `- Question mix target: application focused.
+- Prefer scenario, short_answer, multi_select, matching, and ordering when they naturally fit.
+- Ask students to apply, compare, diagnose, sequence, or reason from the notes.`,
+} satisfies Record<GenerationSettings["questionMix"], string>;
+
+export const content =  (context: string, settings: GenerationSettings) => {
 
     return `
 You are generating a structured educational test.
@@ -11,9 +28,12 @@ Rules:
 - Output STRICT valid JSON only
 - No markdown
 - No code blocks
+- Generate exactly ${settings.questionCount} questions
 - Escape any line breaks inside JSON string values as \\n
 - Do not include literal unescaped tabs or newlines inside quoted strings
 - Questions MUST be answerable ONLY from the provided context
+${difficultyInstructions[settings.difficulty]}
+${questionMixInstructions[settings.questionMix]}
 - Generate a mix of:
   - multiple_choice
   - multi_select

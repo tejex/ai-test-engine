@@ -1,8 +1,10 @@
 import { api } from "./client";
 import type { Question } from "../components/types/questions";
+import type { GenerationSettings } from "../components/types/generation";
 
 type GenerateTestPayload = {
   documentId: string;
+  settings: GenerationSettings;
 };
 
 type GenerateTestResponse = {

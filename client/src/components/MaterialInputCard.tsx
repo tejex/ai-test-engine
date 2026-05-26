@@ -120,7 +120,7 @@ const MaterialInputCard = ({
     <Paper
       elevation={0}
       sx={{
-        maxWidth: 720,
+        width: '100%',
         mx: 'auto',
         p: 3,
         borderRadius: 2,
@@ -151,8 +151,8 @@ const MaterialInputCard = ({
       </Typography>
 
       <TextareaAutosize
-        minRows={5}
-        maxRows={8}
+        minRows={8}
+        maxRows={12}
         placeholder="Paste or type a new note here..."
         value={draftNote}
         onPaste={handlePaste}
