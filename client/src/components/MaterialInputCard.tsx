@@ -13,6 +13,10 @@ import {
   extractNoteTextFromFile,
   supportedNoteFileTypes,
 } from '../utils/fileTextExtraction';
+import {
+  MIN_STUDY_MATERIAL_CHARACTERS,
+  getStudyMaterialValidation,
+} from './notes/noteValidation';
 
 type MaterialInputCardProps = {
   draftNote: string;
@@ -108,6 +112,8 @@ const MaterialInputCard = ({
   };
 
   const hasStudyMaterial = notes.length > 0 || draftNote.trim().length > 0;
+  const studyMaterialValidation = getStudyMaterialValidation(notes, draftNote);
+  const canGenerateTest = hasStudyMaterial && studyMaterialValidation.isValid;
   const expandedNote = expandedNoteIndex === null ? '' : notes[expandedNoteIndex] || '';
 
   return (
@@ -201,10 +207,24 @@ const MaterialInputCard = ({
         onRemoveNote={removeNote}
       />
 
+      {hasStudyMaterial && !studyMaterialValidation.isValid && (
+        <Typography
+          variant="body2"
+          sx={{
+            color: theme.warning,
+            mb: 2,
+            lineHeight: 1.5,
+          }}
+        >
+          Add {studyMaterialValidation.remainingCharacters} more characters before generating a test. Study material
+          needs at least {MIN_STUDY_MATERIAL_CHARACTERS} characters so the AI has enough context.
+        </Typography>
+      )}
+
       <AppButton
         fullWidth
         variant="contained"
-        disabled={!hasStudyMaterial || isGenerating}
+        disabled={!canGenerateTest || isGenerating}
         onClick={handleSubmit}
         sx={{
           py: 1.5,

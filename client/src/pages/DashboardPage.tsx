@@ -220,7 +220,7 @@ export default function DashboardPage() {
                 <AppButton
                   variant="contained"
                   startIcon={<FlashOnIcon />}
-                  onClick={() => navigate(metrics.missedQuestions > 0 ? "/results" : "/upload")}
+                  onClick={() => navigate(metrics.missedQuestions > 0 ? "/practice/missed" : "/upload")}
                   sx={{
                     backgroundColor: theme.accent,
                     color: "#fff",

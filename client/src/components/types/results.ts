@@ -18,6 +18,7 @@ export type ResultResponse = {
   isCorrect: boolean;
   feedback: string;
   question: {
+    id?: string;
     question: string;
     correctAnswer: string;
     explanation: string;
@@ -29,5 +30,13 @@ export type ResultResponse = {
 export type AttemptResult = {
   id: string;
   score: number;
+  createdAt?: string;
+  test?: {
+    id: string;
+    createdAt?: string;
+    document?: {
+      title?: string;
+    };
+  };
   responses: ResultResponse[];
 };

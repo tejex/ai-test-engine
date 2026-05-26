@@ -117,7 +117,7 @@ export default function TestPage() {
                   sx={{
                     color: theme.accent,
                     fontWeight: 600,
-                    fontFamily: 'monospace',
+                    fontFamily: 'inherit',
                   }}
                 >
                   {formatTime(timeLeft)}

@@ -26,6 +26,7 @@ The current product direction is exam-first: instead of only creating passive su
 - Clear all previous attempts.
 - Light/dark theme toggle.
 - Dashboard with active recall stats, score visuals, activity calendar, weak areas, and recent tests.
+- Missed-question flashcard review from incorrect previous responses.
 - SQLite-backed persistence through Prisma.
 
 ## Tech Stack
@@ -153,7 +154,8 @@ npx prisma studio
 6. Take the exam from question one.
 7. Submit the exam.
 8. Review score, feedback, and previous attempts.
-9. Return to previous results from the dashboard, recent tests drawer, or results page.
+9. Practice missed questions as flashcards from the dashboard.
+10. Return to previous results from the dashboard or results page.
 
 ## Data Model Overview
 

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import PageFrame from "../components/layout/PageFrame";
 import MaterialInputCard from "../components/MaterialInputCard";
+import { getStudyMaterialValidation } from "../components/notes/noteValidation";
 import { useGenerateTest } from "../hooks/useGenerateTest";
 
 export default function UploadNotesPage() {
@@ -15,7 +16,7 @@ export default function UploadNotesPage() {
     try {
       const text = [...notes, draftNote.trim()].filter(Boolean).join("\n\n---\n\n");
 
-      if (!text) {
+      if (!text || !getStudyMaterialValidation(notes, draftNote).isValid) {
         return;
       }
 

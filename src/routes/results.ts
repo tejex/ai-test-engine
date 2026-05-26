@@ -15,7 +15,11 @@ router.get("/:attemptId", async (req, res) => {
             question: true,
           },
         },
-        test: true,
+        test: {
+          include: {
+            document: true,
+          },
+        },
       },
     });
 
