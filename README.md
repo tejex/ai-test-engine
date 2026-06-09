@@ -1,4 +1,4 @@
-# AI Test Engine
+# Recall.AI
 
 AI Test Engine is a study app that turns notes, PDFs, TXT, Markdown, and DOCX files into practice exams. Students can attach multiple note sources, generate an exam from that material, take the test, submit answers, and review previous attempts with AI-generated grading feedback.
 
